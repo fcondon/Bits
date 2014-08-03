@@ -1,4 +1,5 @@
 phoneme_placeholder = "0"
+phoneme_type_0 = "0"
 phoneme_type_1 = "1"
 phoneme_type_2 = "2"
 phoneme_type_3 = "3"
@@ -7,14 +8,14 @@ phoneme_type_5 = "5"
 phoneme_type_6 = "6"
 
 phoneme_maps = str.maketrans({
-        "a" : None,
-        "e" : None,
-        "i" : None,
-        "o" : None,
-        "u" : None,
-        "h" : None,
-        "w" : None,
-        "y" : None,
+        "a" : phoneme_type_0,
+        "e" : phoneme_type_0,
+        "i" : phoneme_type_0,
+        "o" : phoneme_type_0,
+        "u" : phoneme_type_0,
+        "h" : phoneme_type_0,
+        "w" : phoneme_type_0,
+        "y" : phoneme_type_0,
         "b" : phoneme_type_1,
         "f" : phoneme_type_1,
         "p" : phoneme_type_1,
@@ -45,11 +46,22 @@ def soundex(input_str):
     # remove dupes
     working_str = remove_consecutive_dupes(working_str)
 
+    # remove zeros
+    working_str = remove_char(working_str, "0")
+
     # pad with zeroes to 4 characters
     while len(working_str) < 4:
         working_str += phoneme_placeholder
 
     return working_str[:4]
+
+def remove_char(input_str, to_remove):
+    if len(input_str) == 0:
+        return ""
+    elif input_str[0] == to_remove:
+        return remove_char(input_str[1:], to_remove)
+    else:
+        return input_str[0] + remove_char(input_str[1:], to_remove)
 
 def remove_consecutive_dupes(input_str):
     working_str = input_str
