@@ -7,6 +7,7 @@ var ZERO = λ("f:λ(x:x)");
 var ONE = SUCC(ZERO);
 var TWO = SUCC(ONE);
 var THREE = SUCC(TWO);
+var FOUR = SUCC(THREE);
 
 var IF = λ("f:λ(t:λ(e:(f(t)(e))))"); 
 var _IF = function(c) {
@@ -46,4 +47,40 @@ var _TIMES = function(x) {
             return x(y(z));
         };
     };
+}
+
+// λn:n(λx:FALSE)(TRUE)
+var IS_ZERO = λ("n:n(λ(x:λ(t:λ(e:e))))(λ(t:λ(e:t)))");
+var _IS_ZERO = function(n) {
+    return n(function(x) {
+        return FALSE;
+    })(TRUE);
+}
+
+// λnsz.n(λnf.f(n(s)))(λf.z)(λx.x)
+var PRED = λ("n:(λ(s:λ(z:n(λ(n:λ(f:(f(n(s))))))(λ(f:z))(λ(x:x)))))");
+var _PRED = function(n) {
+    return function(s) {
+        return function(z) {
+            return n(function(n) {
+                return function(f) {
+                    return f(n(s));
+                };
+            })(function(f) {
+                return z;
+            })(function(x) {
+                return x;
+            });
+        };
+    };
+}
+
+// I'ma need a y combinator
+// λn.IF(IS_ZERO(n))(ONE)(TIMES(FACT(PRED(n)))(n))
+var _FACT = function(n) {
+    return IF(IS_ZERO(n))(function() {
+                return ONE;
+            })(function() {
+                return TIMES(_FACT(PRED(n)))(n);
+            })();
 }
