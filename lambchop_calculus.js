@@ -9,6 +9,7 @@ var TWO = SUCC(ONE);
 var THREE = SUCC(TWO);
 var FOUR = SUCC(THREE);
 
+// λfte.fte
 var IF = λ("f:λ(t:λ(e:(f(t)(e))))"); 
 var _IF = function(c) {
     return function(t) {
@@ -18,6 +19,7 @@ var _IF = function(c) {
     };
 };
 
+// λte.t
 var TRUE = λ("t:λ(e:t)");
 var _TRUE = function(t) {
     return function(e) {
@@ -25,6 +27,7 @@ var _TRUE = function(t) {
     };
 };
 
+// λte.e
 var FALSE = λ("t:λ(e:e)");
 var _FALSE = function(t) {
     return function(e) {
@@ -32,7 +35,7 @@ var _FALSE = function(t) {
     };
 };
 
-// λm:λ(n:m(SUCC)(n))
+// λmn.m(SUCC)(n)
 var ADD = λ("m:λ(n:λ(f:λ(x:((n(f))((m(f))(x))))))");
 var _ADD = function(m) {
     return function(n) {
@@ -40,6 +43,7 @@ var _ADD = function(m) {
     };
 }
 
+// λxyz.x(yz)
 var TIMES = λ("x:λ(y:λ(z:x(y(z))))");
 var _TIMES = function(x) {
     return function(y) {
@@ -49,9 +53,9 @@ var _TIMES = function(x) {
     };
 }
 
-// λn:n(λx:FALSE)(TRUE)
-var IS_ZERO = λ("n:n(λ(x:λ(t:λ(e:e))))(λ(t:λ(e:t)))");
-var _IS_ZERO = function(n) {
+// λn.n(λx.FALSE)TRUE
+var ISZERO = λ("n:n(λ(x:λ(t:λ(e:e))))(λ(t:λ(e:t)))");
+var _ISZERO = function(n) {
     return n(function(x) {
         return FALSE;
     })(TRUE);
@@ -78,7 +82,7 @@ var _PRED = function(n) {
 // I'ma need a y combinator
 // λn.IF(IS_ZERO(n))(ONE)(TIMES(FACT(PRED(n)))(n))
 var _FACT = function(n) {
-    return IF(IS_ZERO(n))(function() {
+    return IF(ISZERO(n))(function() {
                 return ONE;
             })(function() {
                 return TIMES(_FACT(PRED(n)))(n);
