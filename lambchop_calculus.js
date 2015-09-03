@@ -79,18 +79,32 @@ var _PRED = function(n) {
     };
 }
 
-// λf.(λg.f(gg))(λg.f(gg))
-var Y = λ("f:(λ(g:f(g(g))))(λ(g:f(g(g))))");
+// λf.(λx.f(xx))(λx.f(xx))
+var Y = λ("f:(λ(x:f(x(x))))(λ(x:f(x(x))))");
 var _Y = function(f) {
-    return function(g) {
-        return f(g(g));
-    }(function(g) {
-        return f(g(g));
+    return function(x) {
+        return f(x(x));
+    }(function(x) {
+        return f(x(x));
+    });
+}
+
+// λf.(λx.f(λy.xxy))(λx.f(λy.xxy))
+var YS = λ("f:λ(x:(f(λ(y:(x(x))(y)))))(λ(x:(f(λ(y:(x(x))(y))))))");
+var _YS = function(f) {
+    return function(x) {
+        return f(function(y) {
+            return x(x)(y);
+        });
+    }(function(x) {
+        return f(function(y) {
+            return x(x)(y);
+        });
     });
 }
 
 // λn.IF(ISZERO(n))(ONE)(TIMES(FACT(PRED(n)))(n))
-var FACT = Y(λ("f:λ(n:"+IF+"("+ISZERO+"(n))("+ONE+")("+TIMES+"(f("+PRED+"(n))))(n))"));
+var FACT = YS(λ("f:λ(n:"+IF+"("+ISZERO+"(n))("+ONE+")("+TIMES+"(f("+PRED+"(n))))(n))"));
 var _FACT = function(n) {
     return IF(ISZERO(n))(function() {
                 return ONE;
