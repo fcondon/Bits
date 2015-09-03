@@ -79,8 +79,18 @@ var _PRED = function(n) {
     };
 }
 
-// I'ma need a y combinator
-// λn.IF(IS_ZERO(n))(ONE)(TIMES(FACT(PRED(n)))(n))
+// λf.(λg.f(gg))(λg.f(gg))
+var Y = λ("f:(λ(g:f(g(g))))(λ(g:f(g(g))))");
+var _Y = function(f) {
+    return function(g) {
+        return f(g(g));
+    }(function(g) {
+        return f(g(g));
+    });
+}
+
+// λn.IF(ISZERO(n))(ONE)(TIMES(FACT(PRED(n)))(n))
+var FACT = Y(λ("f:λ(n:"+IF+"("+ISZERO+"(n))("+ONE+")("+TIMES+"(f("+PRED+"(n))))(n))"));
 var _FACT = function(n) {
     return IF(ISZERO(n))(function() {
                 return ONE;
