@@ -1,0 +1,12 @@
+(doseq [i (range 1 100)]
+  (if (= 0 (mod i 3))
+    (if (= 0 (mod i 5))
+      (println "fizzbuzz")
+      (println "fizz")
+    )
+    (if (= 0 (mod i 5))
+      (println "buzz")
+      (println i)
+    )
+  )
+)
